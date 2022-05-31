@@ -1,5 +1,4 @@
-import java.io.*;
-import java.util.*;
+// print abbr
 
 public class Main {
 
@@ -20,6 +19,191 @@ public class Main {
         String str = scn.nextLine();
         solution(str,"",0,0);
     }
-    
-    
 }
+
+-----------------------------------------------------------------------------
+// nqueens-branch-and-bound-official
+
+public class Main {
+
+
+    public static void solution(boolean[][] board, int row, boolean[] cols, boolean[] diag, boolean[] revDiag, String asf){
+        
+        if( row == board.length ){
+            System.out.println(asf+".");
+            return;
+        }
+        
+        int n = board.length;
+        for(int col=0 ; col < n ; col++){
+            
+            if( 
+                !board[row][col] &&
+                !cols[col] &&
+                !diag[row+col] &&
+                !revDiag[row-col + n-1]
+                ){
+                
+                board[row][col] = !board[row][col];
+                cols[col] = !cols[col];
+                diag[row+col] = !diag[row+col];
+                revDiag[row-col + n-1] = !revDiag[row-col + n-1];
+                
+                solution( board, row+1, cols, diag, revDiag, asf+row+"-"+col+", " );
+                
+                board[row][col] = !board[row][col];
+                cols[col] = !cols[col];
+                diag[row+col] = !diag[row+col];
+                revDiag[row-col + n-1] = !revDiag[row-col + n-1];
+            }
+            
+        }
+        
+    }
+    
+
+  public static void main(String[] args) throws Exception {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    boolean[][] board = new boolean[n][n];
+    //write your code here
+    
+    boolean[] cols = new boolean[n];
+    boolean[] diag = new boolean[2*n-1];
+    boolean[] revDiag = new boolean[2*n -1];
+    
+    solution( board, 0,cols, diag, revDiag, "" );
+  }
+
+}
+
+-----------------------------------------------------------------------------
+1255. Maximum Score Words Formed by Letters
+https://leetcode.com/problems/maximum-score-words-formed-by-letters/
+
+
+public static int solution(String[] words, int[] freq, int[] score, int idx) {
+		//write your code here
+		
+		if(idx == words.length){
+		    return 0;
+		}
+		
+		int noCall = solution( words, freq, score, idx+1  );
+		
+		int yesCall = 0;
+		
+		int curScore = 0;
+		boolean flag = false;
+		for( int i=0 ;  i<words[idx].length() ; i++ ){
+		    int c = words[idx].charAt(i) - 'a';
+		    curScore += score[c];
+		    
+		    if( freq[c] == 0 ){
+		        flag = true;
+		    }
+		    
+		    freq[c]--;
+		}
+		
+		if( !flag ){
+		    yesCall = curScore + solution( words, freq, score, idx+1  );
+		}
+		
+		for( int i=0 ;  i<words[idx].length() ; i++ ){
+		    int c = words[idx].charAt(i) - 'a';
+		    freq[c]++;
+		}
+		
+		return Math.max(noCall, yesCall);
+	}
+
+
+-----------------------------------------------------------------------------
+
+//  https://leetcode.com/problems/lexicographical-numbers/
+public static void solve(int i, int n){
+        
+        if( i>n ){
+            return ;
+        }
+        
+        System.out.println(i);
+        for(int j=0 ; j<=9 ; j++){
+            solve( i*10+j, n);
+        }
+        
+    }
+    
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		int n = scn.nextInt();
+
+		//write your code here
+		
+		for(int i=1 ; i<=9 ; i++){
+		    solve(i,n );
+		}
+	}
+
+    -----------------------------------------------------------------------------
+
+https://leetcode.com/problems/find-the-winner-of-the-circular-game/
+    // josepheus
+
+    public static int solution(int n, int k){
+    //write your code here
+    
+    if( n==1 ){
+        return 0;
+    }
+    // ans for n-1
+    int nm1 = solution(n-1,k);
+    int ans = (nm1+k)%n;
+    
+    return ans;
+  }
+
+
+-----------------------------------------------------------------------------
+
+gold mine 2
+1219. Path with Maximum Gold
+https://leetcode.com/problems/path-with-maximum-gold/
+
+int[] dir = {0,1,0,-1,0};
+	public int find(int[][] arr,boolean[][] vis, int r, int c){
+	    
+	    if( r<0 || c<0 || r==arr.length || c==arr[0].length || vis[r][c] || arr[r][c] == 0 ){
+	           return 0;
+	    }
+	    
+	    vis[r][c] = true;
+	    int sum = 0;
+	    
+	    for(int d=0 ; d<4 ; d++){
+	        sum = Math.max( sum, find(arr, vis, r + dir[d] , c + dir[d+1]) );
+	    }
+        vis[r][c] = false;
+	    return sum + arr[r][c];
+	}
+	
+    public int getMaximumGold(int[][] grid) {
+        
+        int max = 0;
+        int n = grid.length , m = grid[0].length;
+		boolean[][] vis = new boolean[n][m];
+		
+		for(int i=0 ; i<n ; i++){
+		    for(int j=0 ; j<m ; j++){
+		        
+		        if( grid[i][j] != 0 && !vis[i][j] ){
+		            int cur = find(grid,vis, i,j);
+		            
+		            max = Math.max(max, cur);
+		        }
+		        
+		    }
+		}
+        return max;
+    }

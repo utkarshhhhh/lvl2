@@ -1,0 +1,57 @@
+// sudoku
+
+public static boolean valid(int[][] board, int i, int j, int n) {
+
+    for (int r = 0 ; r < 9 ; r++) {
+      if ( board[r][j] == n ) return false;
+    }
+
+    for (int c = 0 ; c < 9 ; c++) {
+      if ( board[i][c] == n ) return false;
+    }
+
+    int r = i / 3 * 3;
+    int c = j / 3 * 3;
+
+    for (int k = r ; k < r + 3 ; k++) {
+      for (int l = c ; l < c + 3 ; l++) {
+        if ( board[k][l] == n ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+
+  public static void solveSudoku(int[][] board, int i, int j) {
+    // write yopur code here
+
+    if ( i == board.length ) {
+      display(board);
+      return;
+    }
+
+    int ni = i, nj = j;
+    if ( j == board[0].length - 1 ) {
+      ni++;
+      nj = 0;
+    } else {
+      nj++;
+    }
+
+    if ( board[i][j] != 0 ) {
+      solveSudoku(board, ni, nj);
+      return;
+    }
+
+    for (int n = 1; n <= 9 ; n++) {
+
+        if( valid(board,i,j,n) ){
+          board[i][j] = n;
+          solveSudoku(board, i, j);;
+          board[i][j] = 0;
+        }
+    }
+
+  }

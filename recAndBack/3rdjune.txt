@@ -1,0 +1,206 @@
+all-palindromic-permutations-official
+
+
+public static void generatepw(int cs, int ts, HashMap<Character, Integer> fmap, Character oddc, String asf) {
+	    
+	    if( cs == ts+1 ){
+	        
+	        String ans = asf + (oddc==null?"":oddc);
+	        StringBuilder rev = new StringBuilder(asf);
+	        System.out.println( ans + rev.reverse().toString() );
+	        return ;
+	    }
+		
+		for(char c : fmap.keySet() ){
+		    
+		    if( fmap.get(c) > 0 ){
+		        int val = fmap.get(c);
+		        fmap.put(c,val-1); 
+		        generatepw( cs+1, ts,fmap, oddc,asf + c );
+		        fmap.put(c,val); 
+		    }
+		    
+		}
+		
+	}
+
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		String str = scn.next();
+		HashMap<Character, Integer> fmap = new HashMap<>();
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			fmap.put(ch, fmap.getOrDefault(ch, 0) + 1);
+		}
+		
+		//write your code here
+		
+		Character ch = null;
+		int ofc = 0;
+		int len = 0;
+		for( char c='a' ; c<='z' ; c++ ){
+		    
+    		    if( fmap.containsKey(c) ){
+    		    
+    		    int val = fmap.get(c);
+    		    
+    		    if( val%2 == 1 ){
+    		        ofc++;
+    		        ch = c;
+    		    }
+    		    
+    		    if( ofc>1 ){
+    		    System.out.println(-1);
+    		    return;
+    		        
+    		    }
+    		    
+    		    len += val/2; 
+    		    fmap.put(c,val/2);
+		    }
+		}
+		generatepw( 1,len, fmap, ch, "" );  
+	}
+
+
+-------------------------------------------------------------------------------------
+// all-palindromic-partitions-official
+	public static void solution(String str, String asf) {
+		//write you code here
+		
+		if( str.length() == 0 ){
+		    System.out.println(asf);
+		    return;
+		}
+		
+		for(int i=0 ; i<str.length() ; i++){
+		    
+		    String cur = str.substring(0,i+1);
+		    String ros = str.substring(i+1);
+		    
+		    if( isPallin(cur) ){
+		        solution( ros, asf + "(" + cur + ") " );
+		    }
+		    
+		}
+
+-------------------------------------------------------------------------------------
+// k-subsets-with-equal-sum-official
+
+// ssssf ---- no of subsets so far
+  public static void solution(int[] arr, int vidx, int n, int k, int[] subsetSum, int ssssf, ArrayList<ArrayList<Integer>> ans) {
+    //write your code here
+
+    if ( n == vidx) {
+      if ( k == ssssf && checkSum(subsetSum) ) {
+        for (int i = 0 ; i < k ; i++) {
+          System.out.print( ans.get(i) + " " );
+        }
+        System.out.println();
+      }
+      return;
+    }
+
+    for (int i = 0 ; i < ans.size() ; i++) {
+
+      if ( ans.get(i).size() > 0 ) {
+        ans.get(i).add( arr[vidx] );
+        subsetSum[i] += arr[vidx];
+        solution(arr, vidx + 1, n, k, subsetSum, ssssf, ans);
+        subsetSum[i] -= arr[vidx];
+        ans.get(i).remove( ans.get(i).size() - 1 );
+      } else {
+        ans.get(i).add(arr[vidx]);
+        subsetSum[i] += arr[vidx];
+        solution(arr, vidx + 1, n, k, subsetSum, ssssf + 1, ans);
+        subsetSum[i] -= arr[vidx];
+        ans.get(i).remove( ans.get(i).size() - 1 );
+        break;
+      }
+
+    }
+
+  }
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int[] arr = new int[n];
+    int sum = 0;
+    for (int i =  0 ; i < arr.length; i++) {
+      arr[i] = scn.nextInt();
+      sum += arr[i];
+    }
+    int k = scn.nextInt();
+    // if k is equal to 1, then whole array is your answer
+    if (k == 1) {
+      System.out.print("[");
+      for (int i = 0 ; i  < arr.length; i++) {
+        System.out.print(arr[i] + ", ");
+      }
+      System.out.println("]");
+      return;
+    }
+    //if there are more subsets than no. of elements in array or sum of all elements is not divisible by k
+    if (k > n || sum % k != 0) {
+      System.out.println("-1");
+      return;
+    }
+    int[] subsetSum = new int[k];
+    ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+    for (int i = 0; i < k; i++) {
+      ans.add(new ArrayList<>());
+    }
+    solution(arr, 0, n, k, subsetSum, 0, ans);
+  }
+
+
+--------------------------------------------------------------------------------------
+
+
+// pattern-matching-official
+public static void solution(String str, String pattern, HashMap<Character,String> map, String op){
+		//write your code here
+		
+		 if(pattern.length() == 0){
+	    	if( str.length() == 0 ){
+		        
+		        Set<Character> hash = new HashSet<>();
+		        for(char c: op.toCharArray()){
+		            if( !hash.contains(c) ){
+		                hash.add(c);
+		                System.out.print( c + " -> " + map.get(c) + ", " );
+		            }
+		        }
+		      System.out.println( "." ); 
+		    }
+		    return;
+		}
+		
+	
+	    char p = pattern.charAt(0);
+	    if( map.containsKey(p) ){
+	        
+	        String s = map.get(p);
+	        if( s.length() <= str.length() ){
+	  
+    	        if( s.equals( str.substring(0, s.length()) ) ){
+    	            String ros = str.substring(s.length());
+    	            solution( ros, pattern.substring(1) , map, op );
+    	        }
+	        }
+	        
+	    }else{
+	        
+	        for(int j=0 ; j<str.length() ; j++){
+	            
+	            String left = str.substring(0,j+1);
+	            String right = str.substring(j+1);
+	            
+	            map.put(p,left);
+	            solution( right, pattern.substring(1) , map, op );
+	            map.remove(p);
+	            
+	        }
+	        
+	    }
+	}

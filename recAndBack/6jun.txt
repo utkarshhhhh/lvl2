@@ -1,0 +1,255 @@
+// permutations-words-1-official
+
+
+Sir P1 : (level ->item, options->boxes) 
+      C1: (level ->boxes , options -> to choose or not )
+      P2(using C1 method) : ((level ->boxes , options -> to choose(whom to choose) or not ))
+ Here P2 method style is used
+ 
+
+public static void generateWords(int cs, int ts, HashMap<Character, Integer> fmap, String asf) {
+    // write your code here
+    
+        
+    if( cs > ts ){
+        System.out.println(asf);
+        return;
+    }
+    
+    for(Character c : fmap.keySet()){
+        
+        int val = fmap.get(c);
+        if( val > 0 ){
+            fmap.put( c, val-1 );
+            generateWords( cs+1, ts, fmap, asf+c );
+            fmap.put( c, val );
+        }
+        
+    }
+    
+  }
+
+---------------------------------------------------------------------------------------
+
+// permutations-words-2-official
+
+public static void generateWords(int cc, String str, Character[] spots, 
+                                   HashMap<Character, Integer> lastOccurence) {
+    // write your code here
+    
+    if( cc == str.length() ){
+        
+        for( char c : spots )
+            System.out.print( c );
+        System.out.println();
+        return;
+    }
+    
+    char ch = str.charAt(cc);
+    
+    int lc = lastOccurence.get( ch );
+    
+    for( int i=lc+1 ; i<spots.length ; i++ ){
+        
+        if( spots[i] == null ){
+            spots[i] = ch;
+            lastOccurence.put( ch, i );
+            generateWords( cc+1, str, spots, lastOccurence );
+            lastOccurence.put( ch, lc );
+            spots[i] = null;
+        }
+        
+    }
+    
+  }
+
+---------------------------------------------------------------------------------------
+
+// words-kselection-1-official
+
+public static void combination(int i, String ustr, int ssf, int ts, String asf ) {
+        
+        if( i== ustr.length() ){
+            if( ssf == ts ){
+                System.out.println(asf);
+            }
+           return;
+        }
+        
+        combination( i+1,ustr, ssf+1, ts, asf+ustr.charAt(i) );
+        combination( i+1,ustr, ssf, ts, asf );
+        
+  }
+
+---------------------------------------------------------------------------------------
+
+//  word-kselection-2-official
+
+public static void generateSolution(String s, int cs, int ts, int last, String asf ){
+        
+        if( cs == ts ){
+            System.out.println(asf);
+            return;
+        }
+        
+        for( int i=last+1; i<s.length() ; i++ )
+            generateSolution( s, cs+1, ts, i, asf+ s.charAt(i)  );
+        }
+    }
+
+---------------------------------------------------------------------------------------
+
+// words-klength-words-1-official
+
+public static void generateWords(int cc, String ustr, int ssf, int ts, Character[] spots) {
+    // write your code here
+
+    if ( cc == ustr.length() ) {
+
+      if ( ssf == ts ) {
+        for ( char c : spots )
+          System.out.print( c );
+        System.out.println();
+      }
+      return;
+    }
+
+    char ch = ustr.charAt(cc);
+
+    for ( int i = 0 ; i < spots.length ; i++ ) {
+
+      if ( spots[i] == null ) {
+        spots[i] = ch;
+        generateWords( cc + 1, ustr, ssf+1, ts, spots );
+        spots[i] = null;
+      }
+
+    }
+    generateWords( cc + 1, ustr, ssf, ts, spots );
+  }
+
+
+---------------------------------------------------------------------------------------
+
+// words-klength-words-2-official
+
+public static void generateWords(int cs, int ts, String ustr, HashSet<Character> used, String asf){
+        
+        if( cs == ts ){
+            System.out.println(asf);
+            return;
+        }
+        
+        for(int i=0 ; i<ustr.length() ; i++ ){
+            char c = ustr.charAt(i);
+            if( !used.contains( c ) ){
+                
+                used.add(c);
+                generateWords( cs+1, ts, ustr, used, asf+c );
+                used.remove(c);
+                
+            }
+            
+        }
+        
+    }
+
+---------------------------------------------------------------------------------------
+
+// queens-permutations-2das2d-queen-chooses-official
+
+    public static void queensPermutations(int qpsf, int tq, int[][] chess){
+        // write your code here
+        
+        if( qpsf == tq ){
+            
+            int c = 1;
+            for(int i=0 ; i<chess.length ; i++){
+                for(int j=0 ; j<chess.length ; j++){
+                    System.out.print( (chess[i][j]==0 ? "-" : "q" + chess[i][j] ) + "\t" );
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+        
+            for(int i=0 ; i<chess.length ; i++){
+                for(int j=0 ; j<chess.length ; j++){
+                    if( chess[i][j] == 0 ){
+                        chess[i][j] = qpsf+1;
+                        queensPermutations(qpsf+1, tq, chess);
+                        chess[i][j] = 0;
+                    }
+                }
+        
+            }
+    }
+
+
+---------------------------------------------------------------------------------------
+
+// queens-combinations-2das2d-box-chooses-official
+
+  public static void queensCombinations(int qpsf, int tq, int row, int col, String asf){
+        // write your code here
+        
+        
+        if( row == tq ){
+            if( qpsf == tq ){
+                System.out.println( asf );
+            }
+            return;
+        }
+        
+        if( col == tq-1 ){
+            row++;
+            col = 0;
+        }else{
+            col++;
+        }
+        
+        queensCombinations( qpsf+1, tq, row, col, asf+"q" + (col==0 ? "\n" : "") );
+        queensCombinations( qpsf, tq, row, col, asf+"-" + (col==0 ? "\n" : "") );
+        
+    }
+
+---------------------------------------------------------------------------------------
+
+// queens-permutations-2das2d-box-chooses-official
+
+public static void queensPermutations(int qpsf, int tq, int row, int col, String asf, boolean[] queens) {
+        // write your code here
+        
+        if( row == queens.length ){
+            
+            if( qpsf == tq ){
+                System.out.println(asf);
+                System.out.println();
+            }
+            return;
+        }
+        
+        char sep = '0';
+        if( col == tq-1 ){
+            row++;
+            col = 0;
+            sep = '\n';
+        }else{
+            col++;
+            sep = '\t';
+        }
+        
+        for( int i=0 ; i<queens.length ; i++ ){
+            
+            if( !queens[i] ){
+                queens[i] = true;
+                queensPermutations( qpsf+1, tq, row, col, asf + "q" + (i+1) + sep , queens );
+                queens[i] = false;
+            }
+        }
+        queensPermutations( qpsf, tq, row, col, asf + "-" + sep , queens );
+        
+    }
+
+---------------------------------------------------------------------------------------

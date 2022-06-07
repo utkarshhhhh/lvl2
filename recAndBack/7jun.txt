@@ -1,0 +1,289 @@
+ queens-combinations-2das2d-official
+
+     public static void queensCombinations(int qpsf, int tq, boolean[][] chess, int i, int j){
+        // write your code here
+        
+        if( qpsf == tq ){
+            
+            for(int r=0 ; r<tq ; r++){
+                for(int c=0 ; c<tq ; c++){
+                    System.out.print( chess[r][c]?"q\t":"-\t" );
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+        // complete the current row
+        for( int c = j+1 ; c<tq ; c++){
+                if( !chess[i][c] ){
+                    chess[i][c] = true;
+                    queensCombinations( qpsf+1, tq, chess, i, c );
+                    chess[i][c] = false;
+                }
+            }
+        // complete for next rows
+        for( int r = i+1 ; r<tq ; r++){
+            for( int c = 0 ; c<tq ; c++){
+            
+                if( !chess[r][c] ){
+                    chess[r][c] = true;
+                    queensCombinations( qpsf+1, tq, chess, r, c );
+                    chess[r][c] = false;
+                }
+            }
+        }
+    }
+
+---------------------------------------------------------------------------------------
+
+queens-combinations-2das1d-queen-chooses-official
+
+// last cell no
+    public static void queensCombinations(int qpsf, int tq, boolean[][] chess, int lcno) {
+        // write your code here
+        if( qpsf == tq ){
+            
+            for(int r=0 ; r<tq ; r++){
+                for(int c=0 ; c<tq ; c++){
+                    System.out.print( chess[r][c]?"q\t":"-\t" );
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+        
+        for( int i=lcno+1 ; i<chess.length*chess.length ; i++ ){
+            
+            int r = i/chess.length;
+            int c = i%chess.length;
+            
+            // if( !chess[r][c] ){
+                chess[r][c] = true;
+                queensCombinations( qpsf+1 , tq, chess, i );
+                chess[r][c] = false;
+            // }
+            
+        }
+        
+    }
+
+---------------------------------------------------------------------------------------
+
+//  nqueens-combinations-2das1d-queen-chooses-official
+
+ public static boolean IsQueenSafe(boolean[][] chess, int row, int col) {
+    // write your code here
+
+    for (int r = row ; r >= 0 ; r--) {
+      if ( chess[r][col] ) {
+        return false;
+      }
+    }
+
+    for (int c = col ; c >= 0 ; c--) {
+      if ( chess[row][c] ) {
+        return false;
+      }
+    }
+
+    for (int r = row, c = col ; r >= 0 && c >= 0 ; r--, c--) {
+      if ( chess[r][c] ) {
+        return false;
+      }
+    }
+
+    for (int r = row, c = col ; r >= 0 && c < chess.length ; r--, c++) {
+      if ( chess[r][c] ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public static void nqueens(int qpsf, int tq, boolean[][] chess, int lcno) {
+    if (qpsf == tq) {
+      for (int row = 0; row < chess.length; row++) {
+        for (int col = 0; col < chess.length; col++) {
+          System.out.print(chess[row][col] ? "q\t" : "-\t");
+        }
+        System.out.println();
+      }
+      System.out.println();
+      return;
+    }
+
+    for (int i = lcno + 1; i < chess.length * chess.length; i++) {
+      int row = i / chess.length;
+      int col = i % chess.length;
+
+      if (chess[row][col] == false && IsQueenSafe(chess, row, col)) {
+        chess[row][col] = true;
+        nqueens(qpsf + 1, tq, chess, row * chess.length + col);
+        chess[row][col] = false;
+      }
+    }
+  }
+
+---------------------------------------------------------------------------------------
+
+nqueens-permutations-2das1d-official-queen-chooses
+
+public static boolean IsQueenSafe(int[][] chess, int row, int col) {
+
+        // write your code here
+        
+        // up
+        for( int r = row, c = col ; r>=0 ; r--  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // down
+        for( int r = row, c = col ; r<chess.length ; r++  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // left
+        for( int r = row, c = col ; c>=0 ; c--  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // right
+        for( int r = row, c = col ; c<chess.length ; c++  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        
+        // left diag up
+        for( int r = row, c = col ; r>=0 && c>=0 ; r--, c--  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // left diag down
+        for( int r = row, c = col ; r<chess.length && c>=0 ; r++, c--  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // right up
+        for( int r = row, c = col ; r>=0 && c<chess.length ; r--,c++  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        // right down
+        for( int r = row, c = col ;  r<chess.length && c<chess.length ; r++,c++  ){
+            if( chess[r][c] != 0 ) return false;
+        }
+        return true;
+}
+
+    public static void nqueens(int qpsf, int tq, int[][] chess) {
+        // write your code here
+        
+        if( qpsf == tq ){
+            
+            for(int r=0 ; r<chess.length ; r++ ){
+                for(int c=0 ; c<chess.length ; c++ ){
+                
+                    System.out.print( (chess[r][c]!=0 ? "q"+chess[r][c] : "-") + "\t" );
+                }
+                System.out.println();
+            }
+            System.out.println();
+         return ;   
+        }
+        
+        
+        for( int i=0 ; i<chess.length*chess.length ; i++ ){
+            
+            int r = i/chess.length;
+            int c = i%chess.length;
+            
+            if( chess[r][c] == 0 && IsQueenSafe( chess, r, c ) ){
+                chess[r][c] = qpsf+1;
+                nqueens(qpsf+1, tq, chess );
+                chess[r][c] = 0;
+            }
+        }
+        
+    }
+
+
+---------------------------------------------------------------------------------------
+
+// nknights-combinations-2das1d-knight-chooses-official
+
+    public static boolean IsKnightSafe(boolean[][] chess, int i, int j) {
+        // write your code here
+        
+        int[][] dir = { {2,1}, {2,-1}, {1,2}, {1,-2}, {-2,1}, {-2,-1}, {-1,-2}, {-1,2}  };
+        
+        int n = chess.length;
+        for(int d=0 ; d<dir.length ; d++){
+            
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+            
+            if( r>=0 && r<n && c>=0 && c<n ){
+                if( chess[r][c] ) return false;
+            }
+            
+        }
+        return true;
+    }
+
+    public static void nknights(int kpsf, int tk, boolean[][] chess, int lcno) {
+        if (kpsf == tk) {
+            for (int row = 0; row < chess.length; row++) {
+                for (int col = 0; col < chess.length; col++) {
+                    System.out.print(chess[row][col] ? "k\t" : "-\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+
+        for (int i = lcno + 1; i < chess.length * chess.length; i++) {
+            int row = i / chess.length;
+            int col = i % chess.length;
+
+            if (chess[row][col] == false && IsKnightSafe(chess, row, col)) {
+                chess[row][col] = true;
+                nknights(kpsf + 1, tk, chess, row * chess.length + col);
+                chess[row][col] = false;
+            }
+        }
+    }
+
+---------------------------------------------------------------------------------------
+
+// coin-change-combinations-1-official
+
+public static void coinChange(int i, int[] coins, int amtsf, int tamt, String asf){
+        // write your code here
+        
+        if( i==coins.length ){
+            if( amtsf == tamt ){
+                System.out.println(asf + ".");
+            }
+            return;
+        }
+        
+        coinChange( i+1, coins, amtsf+coins[i], tamt, asf + coins[i] + "-" );
+        coinChange( i+1, coins, amtsf, tamt, asf);
+        
+    }
+    
+---------------------------------------------------------------------------------------
+//  coin-change-combinations-2-official
+
+public static void coinChange(int i, int[] coins, int amtsf, int tamt, String asf) {
+        // write your code here
+        
+        if( i==coins.length ){
+            if( amtsf == tamt )
+            System.out.println(asf + ".");
+            
+            return;
+        }
+        
+        if( amtsf + coins[i] <= tamt )
+        coinChange( i, coins, amtsf+coins[i], tamt , asf + coins[i] + "-" );
+        
+        coinChange( i+1, coins, amtsf, tamt , asf );
+        
+    }
